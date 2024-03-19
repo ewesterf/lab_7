@@ -48,13 +48,27 @@ int main()
     rightWall.setCenter(Vector2f(790, 300));
     rightWall.setStatic(true);
     world.AddPhysicsBody(rightWall);
+
+    //center obstacle
+    PhysicsRectangle center;
+    center.setSize(Vector2f(100, 100));
+    center.setCenter(Vector2f(400, 500));
+    center.setStatic(true);
+    world.AddPhysicsBody(center);
     
 
     int thudCount(0);
     floor.onCollision = [&thudCount](PhysicsBodyCollisionResult result)
     {
-            cout << "thud" << thudCount << endl;
-            thudCount++;
+        cout << "thud" << thudCount << endl;
+        thudCount++;
+    };
+
+    int bangCount(0);
+    center.onCollision = [&bangCount](PhysicsBodyCollisionResult result)
+    {
+        cout << "bang" << bangCount << endl;
+        bangCount++;
     };
 
     Clock clock;
@@ -77,7 +91,14 @@ int main()
         window.draw(ceiling);
         window.draw(leftWall);
         window.draw(rightWall);
+        window.draw(center);
         window.display();
+
+        if (bangCount >= 3)
+        {
+            cout << "Target hit! Game Over.";
+            exit(0);
+        }
     }
 }
 
